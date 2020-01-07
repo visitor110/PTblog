@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
-import LoginForm from '@/components/LoginForm'
+import Login from '@/components/Login'
+
 Vue.use(Router)
 
 const routes = [
@@ -13,10 +14,11 @@ const routes = [
     path: '/home',
     component: Home,
   },
+
   {
     path: '/login',
-    component: LoginForm,
-  },
+    component: Login,
+  }
 ]
 
 export default new Router({

@@ -1,30 +1,10 @@
-# blog
+整体博客项目：
+  前端 vue
+  后端 springboot
+  使用swagger2，来做前后段分离
 
-> A Vue.js project
-
-## Build Setup
-
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
-npm run unit
-
-# run e2e tests
-npm run e2e
-
-# run all tests
-npm test
-```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+当前项目是博客的前端vue项目，使用到的技术如下：
+  vue2.9
+  vue-router
+  axios
+  element-ui

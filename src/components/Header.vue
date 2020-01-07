@@ -6,14 +6,12 @@
       <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
       <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
       <el-tab-pane label="search" name="fifth">search</el-tab-pane>
-      <el-tab-pane label="login" name="login">login</el-tab-pane>
+      <el-tab-pane label="登录" name="login">登录</el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script>
-
-
   export default {
     name: 'Header',
     data() {
@@ -25,7 +23,7 @@
     methods: {
       handleClick(activeName) {
 
-        if (activeName == 'login'&& !this.isLogined){
+        if (activeName == 'login' && !this.isLogined) {
           console.log(activeName)
           this.$router.push('login')
         }
@@ -33,12 +31,8 @@
     }
 
   }
-
 </script>
 
 <style>
-  fifth {
-    color: red;
-  }
 
 </style>
