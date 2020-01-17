@@ -8,8 +8,11 @@
     <el-form-item label="">
       <el-input type="password" v-model="password" auto-complete="off" placeholder="密码"></el-input>
     </el-form-item>
+    <el-form-item label="">
+      <el-checkbox type="checkbox" v-model="remember">记住密码</el-checkbox>
+    </el-form-item>
     <el-form-item>
-      <el-button type="primary" style="width: 100%;" @click="doSubmit()">提交</el-button>
+      <el-button type="primary" style="width: 100%;" @click="doLogin()">提交</el-button>
     </el-form-item>
     <el-row style="text-align: center; margin-top: -10px;;">
       <el-link type="primary">忘记密码</el-link>
@@ -19,41 +22,53 @@
 </template>
 
 <script>
-  import {postRequest} from '../utils/axiosUtils'
+  import {postRequestLogin} from '../utils/axiosUtils'
 
   export default {
+
     data() {
       return {
-        username: 'a',
+        username: 'test1',
         password: '123',
+        remember: true,
         loading: false,
       }
     },
     methods: {
-      doSubmit() {
-        this.loading = true;
-        let _this = this;
-        postRequest('/login', {
-          username: this.username,
-          password: this.password
-        }).then(resp => {
-          _this.loading = false;
+      doLogin() {
+
+        let params = {
+          'username': this.username,
+          'password': this.password,
+          'remember': this.remember
+        }
+
+        postRequestLogin('/user/login', params).then(resp => {
+          this.loading = false;
+          console.log(resp.headers.authorization);
+          console.log(resp.status);
           if (resp.status == 200) {
             //成功
-            var json = resp.data;
-            if (json.status == 'success') {
-              _this.$router.replace({path: '/home'});
-            } else {
-              _this.$alert('登录失败!', '失败!');
-            }
+            this.password = '';
+
+            this.$store.commit({
+              type: 'changeToken',
+              token: resp.headers.authorization
+            }); //token
+            this.$router.replace({path: '/home'});
+
           } else {
             //失败
-            _this.$alert('登录失败!', '失败!');
+            this.$alert('登录失败!', '失败!');
           }
         }, resp => {
-          _this.loading = false;
-          _this.$alert('服务器不见了', '失败!');
+          this.loading = false;
+          console.log(resp)
+          this.$alert('服务器不见了', '失败!');
         });
+      },
+      doRegister(){
+        this.$router.replace({path: 'register'})
       }
     }
   }
