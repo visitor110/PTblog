@@ -18,10 +18,14 @@ axios.defaults.baseURL = '/api'
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
-new Vue({
+window.vue = new Vue({
   el: '#app',
   router,
   store,
   components: {App},
-  template: '<App/>'
+  template: '<App/>',
+  //由于chrome调试
+  // mounted() {
+  //   window.vue = this
+  // }
 })

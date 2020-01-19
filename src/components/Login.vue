@@ -37,26 +37,32 @@
     methods: {
       doLogin() {
 
+        this.loading = true;
         let params = {
           'username': this.username,
           'password': this.password,
           'remember': this.remember
         }
-
         postRequestLogin('/user/login', params).then(resp => {
           this.loading = false;
           console.log(resp.headers.authorization);
           console.log(resp.status);
-          if (resp.status == 200) {
-            //成功
-            this.password = '';
+          if (resp.status === 200) {
 
-            this.$store.commit({
-              type: 'changeToken',
-              token: resp.headers.authorization
-            }); //token
-            this.$router.replace({path: '/home'});
+            let result = resp.data.data;
+            console.log(result);
 
+            if (result.code === 200) {
+              //成功
+              this.password = '';
+              this.$store.commit({
+                type: 'changeToken',
+                token: resp.headers.authorization
+              }); //token
+              this.$router.replace({path: '/home'});
+            } else {
+              this.$alert(resp.data.message,resp.data.data);
+            }
           } else {
             //失败
             this.$alert('登录失败!', '失败!');
@@ -64,10 +70,10 @@
         }, resp => {
           this.loading = false;
           console.log(resp)
-          this.$alert('服务器不见了', '失败!');
+          this.$alert('服务器维护中', '失败!');
         });
       },
-      doRegister(){
+      doRegister() {
         this.$router.replace({path: 'register'})
       }
     }

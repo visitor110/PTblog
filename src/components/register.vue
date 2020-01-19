@@ -1,6 +1,7 @@
 <template>
-  <div id="register">
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="registerForm">
+  <div id="register" >
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="registerForm"
+             v-loading="loading" element-loading-text="加载中。。。">
       <el-form-item label="用户名" prop="username">
         <el-input v-model="ruleForm.username"></el-input>
       </el-form-item>
@@ -13,12 +14,12 @@
       </el-form-item>
 
       <el-form-item label="邮箱" prop="mail">
-        <el-input v-model="ruleForm.mail"></el-input>
+        <el-input v-model="ruleForm.mail" @keyup.enter.native="submitForm('ruleForm')"></el-input>
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-        <el-button @click="resetForm('ruleForm')">重置</el-button>
+        <el-button type="primary"  @click="submitForm('ruleForm')">提交</el-button>
+        <el-button  @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
 
     </el-form>
@@ -51,7 +52,20 @@
           callback();
         }
       };
+      var validateMail = (rule, value, callback) => {
+        var filter = /(^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+$)|(^$)/;
+        if (value === '') {
+          callback(new Error('请输入邮箱'));
+        } else if (filter.test(value)) {
+          callback();
+        } else {
+          callback(new Error('邮箱格式不正确'));
+        }
+      };
+
       return {
+        loading: false,
+
         ruleForm: {
           username: '',
           password: '',
@@ -70,46 +84,47 @@
             {required: true, validator: validatePass2, trigger: 'blur'}
           ],
           mail: [
-            {required: true, message: '请输入邮箱', trigger: 'blur'},
-            {min: 10, max: 20, message: '长度在 10 到 20 个字符', trigger: 'blur'}
+            {required: true, validator: validateMail, trigger: 'blur'},
           ]
         }
       };
     },
     methods: {
       submitForm(formName) {
+        this.loading = true;
         this.$refs[formName].validate((valid) => {
           if (valid) {
-
             let user = {
               username: this.ruleForm.username,
               password: this.ruleForm.password,
               mail: this.ruleForm.mail,
             };
-
-            console.log(user);
-
             postRequest('/user/register', user).then(resp => {
-
-              console.log(resp.status);
+              this.loading = false;
+              console.log(resp);
               if (resp.status == 200) {
-
-                this.$router.replace({path: '/login'});
-
+                if (resp.data.code === 200) {
+                  this.$router.replace({path: '/login'});
+                } else {
+                  this.$alert(resp.data.message, resp.data.data);
+                }
               } else {
                 //失败
                 this.$alert('注册失败!', '失败!');
               }
             }, resp => {
+              this.loading = false;
               console.log(resp)
-              this.$alert('服务器不见了', '失败!');
+              this.$alert('服务器维护中', '失败!');
             });
           } else {
-            console.log('error submit!!');
+            this.loading = false;
+            this.$alert('请按规则填写信息');
             return false;
           }
         });
-      },
+      }
+      ,
       resetForm(formName) {
         this.$refs[formName].resetFields();
       }

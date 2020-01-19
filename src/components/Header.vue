@@ -1,13 +1,34 @@
 <template>
   <div>
-    <el-tabs v-model="activeName" @tab-click="handleClick(activeName)">
-      <el-tab-pane label="首页" name="home">首页</el-tab-pane>
-      <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
-      <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
-      <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
-      <el-tab-pane label="search" name="fifth">search</el-tab-pane>
-      <el-tab-pane label="登录" name="login">登录</el-tab-pane>
-    </el-tabs>
+    <el-row>
+      <el-col :span="20">
+        <el-tabs v-model="activeName" @tab-click="handleClick(activeName)">
+          <el-tab-pane label="首页" name="home">首页</el-tab-pane>
+          <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
+          <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
+          <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
+          <el-tab-pane label="search" name="fifth">search</el-tab-pane>
+        </el-tabs>
+      </el-col>
+      <el-col :span="4" >
+        <span v-if="this.$store.state.user === ''" class="el-dropdown-link" @click="login()">
+            登录·注册
+        </span>
+        <el-dropdown v-else style="">
+          <span class="el-dropdown-link">
+            {{this.$store.state.user}}<i class="el-icon-arrow-down el-icon--right"></i>
+           </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>个人信息</el-dropdown-item>
+            <el-dropdown-item>发表文章</el-dropdown-item>
+            <el-dropdown-item>注销</el-dropdown-item>
+            <el-dropdown-item disabled>双皮奶</el-dropdown-item>
+            <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-col>
+    </el-row>
+
   </div>
 </template>
 
@@ -17,22 +38,32 @@
     data() {
       return {
         activeName: 'home',
-        isLogined: false,
       };
     },
     methods: {
       handleClick(activeName) {
-
-        if (activeName == 'login' && !this.isLogined) {
-          console.log(activeName)
-          this.$router.push('login')
+        switch (activeName) {
+          case 'userManagement': {
+            this.$alert('user management')
+            break;
+          }
         }
+      },
+      login(){
+        this.$router.push('login');
       }
     }
-
   }
 </script>
 
 <style>
+  .el-dropdown-link {
+    cursor: pointer;
+    color: #409EFF;
+  }
+
+  .el-icon-arrow-down {
+    font-size: 12px;
+  }
 
 </style>
