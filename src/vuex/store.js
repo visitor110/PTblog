@@ -6,11 +6,20 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     token: 'aaa',
-    user: ''
+    username: '',
+    userId: ''
   },
   mutations: {
-    changeToken(state, param) {
+    login(state, param) {
       state.token = param.token;
+      state.username = param.username;
+      state.userId = param.userId;
+    },
+    changeToken(state, param) {
+
+    },
+    changeUser(state, param) {
+
     }
   },
   actions: {},

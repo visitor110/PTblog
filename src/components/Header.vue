@@ -10,20 +10,20 @@
           <el-tab-pane label="search" name="fifth">search</el-tab-pane>
         </el-tabs>
       </el-col>
-      <el-col :span="4" >
-        <span v-if="this.$store.state.user === ''" class="el-dropdown-link" @click="login()">
+      <el-col :span="4">
+        <span v-if="this.$store.state.username === ''" class="el-dropdown-link" @click="login()">
             登录·注册
         </span>
-        <el-dropdown v-else style="">
+        <el-dropdown v-else @command="handleCommand">
           <span class="el-dropdown-link">
-            {{this.$store.state.user}}<i class="el-icon-arrow-down el-icon--right"></i>
+            {{this.$store.state.username}}<i class="el-icon-arrow-down el-icon--right"></i>
            </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>个人信息</el-dropdown-item>
-            <el-dropdown-item>发表文章</el-dropdown-item>
-            <el-dropdown-item>注销</el-dropdown-item>
-            <el-dropdown-item disabled>双皮奶</el-dropdown-item>
-            <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
+            <el-dropdown-item command="info">个人信息</el-dropdown-item>
+            <el-dropdown-item command="createArticle">发表文章</el-dropdown-item>
+            <el-dropdown-item command="c">注销</el-dropdown-item>
+            <el-dropdown-item command="d" disabled>双皮奶</el-dropdown-item>
+            <el-dropdown-item command="e" divided>蚵仔煎</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-col>
@@ -41,6 +41,7 @@
       };
     },
     methods: {
+      //标签页
       handleClick(activeName) {
         switch (activeName) {
           case 'userManagement': {
@@ -49,8 +50,19 @@
           }
         }
       },
-      login(){
+      login() {
         this.$router.push('login');
+      },
+      //下拉菜单
+      handleCommand(command) {
+        this.$message('click on item ' + command);
+        switch (command) {
+
+          case 'createArticle': {
+            this.$router.push({path: '/createArticle'});
+            break;
+          }
+        }
       }
     }
   }

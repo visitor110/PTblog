@@ -49,19 +49,21 @@
           console.log(resp.status);
           if (resp.status === 200) {
 
-            let result = resp.data.data;
+            let result = resp.data.result;
             console.log(result);
 
             if (result.code === 200) {
               //成功
               this.password = '';
-              this.$store.commit({
-                type: 'changeToken',
-                token: resp.headers.authorization
+              this.$store.commit('login', {
+                token: resp.headers.authorization,
+                username: this.username,
+                userId: result.data,
               }); //token
+
               this.$router.replace({path: '/home'});
             } else {
-              this.$alert(resp.data.message,resp.data.data);
+              this.$alert(result.message, '登录失败');
             }
           } else {
             //失败
