@@ -14,6 +14,14 @@
         </el-carousel>
       </el-main>
 
+      <button @click="loadBlogs">test</button>
+
+      <ul class="infinite-list" v-infinite-scroll="load" style="overflow:auto">
+        <li v-for="(item,list) in blogList" class="infinite-list-item">
+          {{item}}----{{list}}}
+        </li>
+      </ul>
+
       <el-footer>
         <Foot></Foot>
       </el-footer>
@@ -26,15 +34,41 @@
 
   import Header from "./Header";
   import Foot from "./Foot";
+  import {getRequest} from "../utils/axiosUtils";
 
   export default {
     name: 'Home',
     data() {
       return {
-        imgs: 4
+        imgs: 4,
+        blogList: [],
       }
     },
     components: {Foot, Header},
+    methods: {
+      loadBlogs() {
+        getRequest("/site/blogList").then(resp => {
+          console.log(resp);
+          if (resp.status == 200) {
+            let result = resp.data;
+            if (result.code === 200) {
+              this.blogList = result.data;
+            } else {
+              this.$alert(resp.data.message, resp.data.data);
+            }
+          } else {
+            //失败
+            this.$alert('博客加载失败!', '失败!');
+          }
+        }, resp => {
+          console.log(resp)
+          this.$alert('服务器维护中', '失败!');
+        });
+      },
+      load () {
+        this.count += 5
+      },
+    }
   }
 
 </script>

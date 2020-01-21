@@ -60,6 +60,12 @@
                 username: this.username,
                 userId: result.data,
               }); //token
+              this.$notify({
+                title: this.username,
+                message: "欢迎回来",
+                type: 'success',
+                offset: 100
+              });
 
               this.$router.replace({path: '/home'});
             } else {

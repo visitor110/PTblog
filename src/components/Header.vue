@@ -55,7 +55,7 @@
       },
       //下拉菜单
       handleCommand(command) {
-        this.$message('click on item ' + command);
+        // this.$message('click on item ' + command);
         switch (command) {
 
           case 'createArticle': {

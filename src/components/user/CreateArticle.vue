@@ -34,14 +34,14 @@
       return {
         content: '', // 输入的markdown
         html: '',    // 转成的html
-        title: '' //
+        title: ''
       }
     },
     methods: {
       change(value, render) {
         //实时获取转成html的数据
         this.html = render
-        console.log(this.html)
+        // console.log(this.html)
       },
       // 将图片上传到服务器，返回地址替换到md中
       $imgAdd(pos, $file) {
@@ -76,7 +76,13 @@
             console.log(result);
 
             if (result.code === 200) {
-              this.$alert(result.message)
+              this.$notify({
+                title: '成功',
+                message: result.message,
+                type: 'success',
+                offset: 100
+              });
+              // this.$alert(result.message)
             }
           }
         }, resp => {

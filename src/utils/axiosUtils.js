@@ -44,4 +44,24 @@ export const postRequest = (url, params) => {
       'Accept': 'application/json'
     }
   });
+};
+export const getRequest = (url, params) => {
+  return axios({
+    method: 'get',
+    url: url,
+    data: params,
+    transformRequest: [function (params) {
+      //Do whatever you want to transform the data
+      let ret = ''
+      for (let data in params) {
+        ret += encodeURIComponent(data) + '=' + encodeURIComponent(params[data]) + '&'
+      }
+      return ret;
+    }],
+    headers: {
+      //跨域
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json'
+    }
+  });
 }
