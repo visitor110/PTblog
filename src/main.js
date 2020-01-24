@@ -7,13 +7,14 @@ import store from './vuex/store'
 
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
-
 Vue.use(Element)
 
 import axios from 'axios';
-
 Vue.prototype.$axios = axios;
 axios.defaults.baseURL = '/api'
+
+import infiniteScroll from 'vue-infinite-scroll'
+Vue.use(infiniteScroll)
 
 Vue.config.productionTip = false
 

@@ -4,6 +4,7 @@ import Home from '@/components/Home'
 import Login from '@/components/Login'
 import Register from '@/components/register'
 import Create from '@/components/user/CreateArticle'
+import Test from '@/components/Test'
 
 Vue.use(Router)
 
@@ -27,7 +28,11 @@ const routes = [
   {
     path: '/createArticle',
     component: Create,
-  }
+  },
+  {
+    path: '/test',
+    component: Test,
+  },
 ]
 
 export default new Router({
