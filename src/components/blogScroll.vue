@@ -17,7 +17,7 @@
 
 <script>
 
-  import blogBlock from './BlogBlock'
+  import blogBlock from './blogBlock'
   import axios from 'axios'
 
   export default {
@@ -41,7 +41,7 @@
           blogsPerPage: this.blogsPerPage,
         }
         this.busy = true
-        axios.get("/site/blogList", {params}).then(resp => {
+        axios.get("/blog/blogList", {params}).then(resp => {
           console.log(resp);
           if (resp.status == 200) {
             let result = resp.data;

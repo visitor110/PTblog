@@ -2,10 +2,24 @@
   <div id="blogBlock">
     <div id="blockContent">
       <el-row>
-        {{blog.userId}}
+        <el-col :span="4">
+          <div id="username">
+            {{blog.userId}}
+          </div>
+        </el-col>
+
+        <el-col :span="4">
+          <div id="time">
+            {{blog.createDate}}
+          </div>
+        </el-col>
       </el-row>
+
       <el-row>
-        <h3>{{blog.title}}</h3>
+        <div id="title">
+          <h3>{{blog.title}}</h3>
+        </div>
+
       </el-row>
       <el-row>
         <div v-html="blog.content">
@@ -22,14 +36,21 @@
   export default {
     data() {
       return {
+        createDateTime: this.blog.createDate,
         contentStr: this.blog.content,
       }
     },
+    computed: {},
     props: {
       blog: {
         type: Object,
       }
+    },
+    methods: {
+
     }
+
+
   }
 
 </script>
@@ -47,7 +68,7 @@
   }
 
   .el-row {
-    margin-bottom: 5px;
+    margin-top: 5px;
   }
 
 

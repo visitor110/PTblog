@@ -24,9 +24,9 @@
 
 <script>
 
-  import Header from "./Header";
-  import Foot from "./Foot";
-  import BlogScroll from "./BlogScroll"
+  import Header from "./header";
+  import Foot from "./foot";
+  import BlogScroll from "./blogScroll"
 
   export default {
     name: 'Home',

@@ -93,7 +93,7 @@
           userId: this.$store.state.userId,
           title: this.title,
         }
-        postRequest('/user/createBlog', params).then(resp => {
+        postRequest('/blog/createBlog', params).then(resp => {
           console.log(resp.status);
           if (resp.status === 200) {
 

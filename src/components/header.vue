@@ -21,9 +21,7 @@
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="info">个人信息</el-dropdown-item>
             <el-dropdown-item command="createArticle">发表文章</el-dropdown-item>
-            <el-dropdown-item command="c">注销</el-dropdown-item>
-            <el-dropdown-item command="d" disabled>双皮奶</el-dropdown-item>
-            <el-dropdown-item command="e" divided>蚵仔煎</el-dropdown-item>
+            <el-dropdown-item command="loginOut" divided>注销</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-col>
