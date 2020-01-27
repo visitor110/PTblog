@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Home from '@/components/home'
 import Login from '@/components/login'
 import Register from '@/components/register'
-import Create from '@/components/user/createArticle'
+import Create from '@/components/user/createBlog'
 import Test from '@/components/test'
 import Blog from '@/views/blog'
 
@@ -27,7 +27,7 @@ const routes = [
     component: Register,
   },
   {
-    path: '/createArticle',
+    path: '/createBlog',
     component: Create,
   },
   {

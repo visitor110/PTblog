@@ -20,7 +20,7 @@
            </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="info">个人信息</el-dropdown-item>
-            <el-dropdown-item command="createArticle">发表文章</el-dropdown-item>
+            <el-dropdown-item command="createBlog">发表文章</el-dropdown-item>
             <el-dropdown-item command="loginOut" divided>注销</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -56,8 +56,8 @@
         // this.$message('click on item ' + command);
         switch (command) {
 
-          case 'createArticle': {
-            this.$router.push({path: '/createArticle'});
+          case 'createBlog': {
+            this.$router.push({path: '/createBlog'});
             break;
           }
         }

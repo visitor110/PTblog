@@ -19,9 +19,11 @@
       v-for="tag in dynamicTags"
       closable
       :disable-transitions="false"
+      effect="dark"
       @close="handleClose(tag)">
       {{tag}}
     </el-tag>
+
     <el-input
       class="input-new-tag"
       v-if="inputVisible"
@@ -57,7 +59,7 @@
         html: '',    // 转成的html
         title: '',
 
-        dynamicTags: ['标签一', '标签二', '标签三'],
+        dynamicTags: [],
         inputVisible: false,
         inputValue: ''
       }
@@ -92,6 +94,7 @@
           username: this.$store.state.username,
           userId: this.$store.state.userId,
           title: this.title,
+          tagList: this.dynamicTags,
         }
         postRequest('/blog/createBlog', params).then(resp => {
           console.log(resp.status);
@@ -116,6 +119,7 @@
         });
       },
       handleClose(tag) {
+
         this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
       },
 
@@ -128,12 +132,36 @@
 
       handleInputConfirm() {
         let inputValue = this.inputValue;
-        if (inputValue) {
+        if (inputValue && this.validate(inputValue)) {
           this.dynamicTags.push(inputValue);
         }
         this.inputVisible = false;
         this.inputValue = '';
       },
+      validate(inputValue){
+        if(this.dynamicTags.length === 5){
+          this.$notify({
+            title: "错误",
+            message: "最多5个标签",
+            type: 'error',
+            offset: 100
+          });
+          return false;
+        }
+        for(let tag of this.dynamicTags){
+          if(tag === inputValue){
+            this.$notify({
+              title: "错误",
+              message: "已存在标签",
+              type: 'error',
+              offset: 100
+            });
+            return false;
+          }
+
+        }
+        return true;
+      }
     }
 
   }

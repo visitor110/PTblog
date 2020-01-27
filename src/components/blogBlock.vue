@@ -26,7 +26,9 @@
         </div>
       </el-row>
       <el-row>
-        <h5>tags....</h5>
+        <el-tag id="tags" v-for="tag in tagList" :key="tag.tagName">
+          {{tag.tagName}}
+        </el-tag>
       </el-row>
     </div>
   </div>
@@ -38,6 +40,7 @@
       return {
         createDateTime: this.blog.createDate,
         contentStr: this.blog.content,
+        tagList: this.blog.tagList,
       }
     },
     computed: {},
@@ -46,9 +49,7 @@
         type: Object,
       }
     },
-    methods: {
-
-    }
+    methods: {}
 
 
   }
@@ -70,6 +71,8 @@
   .el-row {
     margin-top: 5px;
   }
-
+  #tags{
+    margin-left: 10px;
+  }
 
 </style>
