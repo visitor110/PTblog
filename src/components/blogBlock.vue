@@ -26,7 +26,7 @@
         </div>
       </el-row>
       <el-row>
-        <el-tag id="tags" v-for="tag in tagList" :key="tag.tagName">
+        <el-tag id="tags" v-for="tag in tagList" :key="tag.tagName" size="mini">
           {{tag.tagName}}
         </el-tag>
       </el-row>

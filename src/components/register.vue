@@ -1,5 +1,5 @@
 <template>
-  <div id="register" >
+  <div id="register">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="registerForm"
              v-loading="loading" element-loading-text="加载中。。。">
       <el-form-item label="用户名" prop="username">
@@ -14,12 +14,21 @@
       </el-form-item>
 
       <el-form-item label="邮箱" prop="mail">
-        <el-input v-model="ruleForm.mail" @keyup.enter.native="submitForm('ruleForm')"></el-input>
+        <el-input v-model="ruleForm.mail"></el-input>
+      </el-form-item>
+
+      <el-form-item label="邮箱验证码" prop="mailVerifyCode">
+        <el-input v-model="ruleForm.mailVerifyCode" @keyup.enter.native="submitForm('ruleForm')"
+                  placeholder="请输入验证码" style="width: 58%"></el-input>
+        <el-button @click="sendVerifyCode(ruleForm.mail)" style="width: 40%" type="success" :disabled="disabled=!show">
+          <span v-show="show">获取验证码</span>
+          <span v-show="!show" class="count">{{count}} s</span>
+        </el-button>
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary"  @click="submitForm('ruleForm')">提交</el-button>
-        <el-button  @click="resetForm('ruleForm')">重置</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+        <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
 
     </el-form>
@@ -30,6 +39,7 @@
 <script>
   import {postRequest} from '../utils/axiosUtils'
 
+  const TIME_COUNT = 60; //更改倒计时时间
   export default {
     name: 'register',
     data() {
@@ -54,6 +64,7 @@
       };
       var validateMail = (rule, value, callback) => {
         var filter = /(^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+$)|(^$)/;
+        // /^[A-Za-zd]+([-_.][A-Za-zd]+)*@([A-Za-zd]+[-.])+[A-Za-zd]{2,5}$/;
         if (value === '') {
           callback(new Error('请输入邮箱'));
         } else if (filter.test(value)) {
@@ -62,15 +73,51 @@
           callback(new Error('邮箱格式不正确'));
         }
       };
+      var validateMailVerifyCode = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入用邮箱验证码'));
+        } else {
+          callback();
+        }
+      };
+      var validateMobilePhone = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('负责人手机号不可为空'));
+        } else {
+          if (value !== '') {
+            var reg = /^1[3456789]\d{9}$/;
+            if (!reg.test(value)) {
+              callback(new Error('请输入有效的手机号码'));
+            }
+          }
+          callback();
+        }
+      };
+      var validateWeixin = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('微信号不能为空'));
+        } else {
+          var reg = /^[a-zA-Z][a-zA-Z0-9_-]{5,19}$/;
+          if (!reg.test(value)) {
+            callback(new Error('请输入正确的微信号码'));
+          } else {
+            callback();
+          }
+        }
+      };
 
       return {
+        show: true,  // 初始启用按钮
+        count: '',   // 初始化次数
+        timer: null,
         loading: false,
 
         ruleForm: {
           username: '',
           password: '',
           checkPassword: '',
-          mail: ''
+          mail: '',
+          mailVerifyCode: '',
         },
         rules: {
           username: [
@@ -85,6 +132,9 @@
           ],
           mail: [
             {required: true, validator: validateMail, trigger: 'blur'},
+          ],
+          mailVerifyCode: [
+            {required: true, validator: validateMailVerifyCode, trigger: 'blur'},
           ]
         }
       };
@@ -127,7 +177,56 @@
       ,
       resetForm(formName) {
         this.$refs[formName].resetFields();
-      }
+      },
+
+      sendVerifyCode(value) {
+        this.$refs['ruleForm'].validateField("mail", (valid) => {
+          if (!valid) {
+            //60s cd
+            if (!this.timer) {
+              this.count = TIME_COUNT;
+              this.show = false;
+              this.timer = setInterval(() => {
+                if (this.count > 0 && this.count <= TIME_COUNT) {
+                  this.count--;
+                } else {
+                  this.show = true;
+                  clearInterval(this.timer);  // 清除定时器
+                  this.timer = null;
+                }
+              }, 1000)
+            }
+
+            let param = {
+              mail: value,
+            }
+            postRequest('/user/mailVerifyCode', param).then(resp => {
+              this.loading = false;
+              console.log(resp);
+              if (resp.status == 200) {
+                if (resp.data.code === 200) {
+                  //this
+                } else {
+                  this.$alert(resp.data.message, resp.data.data);
+                }
+              } else {
+                //失败
+                this.$alert('注册失败!', '失败!');
+              }
+            }, resp => {
+              this.loading = false;
+              console.log(resp)
+              this.$alert('服务器维护中', '失败!');
+            });
+          } else {
+            return false;
+          }
+        });
+
+
+
+
+      },
     }
   }
 </script>
