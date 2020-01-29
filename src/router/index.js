@@ -1,11 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/home'
-import Login from '@/components/login'
-import Register from '@/components/register'
+import Login from '@/views/login'
+import Register from '@/views/register'
 import Create from '@/components/user/createBlog'
 import Test from '@/components/test'
 import Blog from '@/views/blog'
+import FindPassword from '@/views/findPassword'
 
 Vue.use(Router)
 
@@ -37,6 +38,10 @@ const routes = [
   {
     path: '/blog/:id',
     component: Blog,
+  },
+  {
+    path: '/findPasswordByMail',
+    component: FindPassword,
   },
 ]
 
