@@ -20,7 +20,7 @@
       <el-form-item label="邮箱验证码" prop="mailVerifyCode">
         <el-input v-model="ruleForm.mailVerifyCode" @keyup.enter.native="submitForm('ruleForm')"
                   placeholder="请输入验证码" style="width: 58%"></el-input>
-        <el-button @click="sendVerifyCode(ruleForm.mail)" style="width: 40%" type="success" :disabled="disabled=!show">
+        <el-button @click="sendVerifyCode" style="width: 40%" type="success" :disabled="disabled=!show">
           <span v-show="show">获取验证码</span>
           <span v-show="!show" class="count">{{count}} s</span>
         </el-button>
@@ -30,7 +30,6 @@
         <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
-
     </el-form>
 
   </div>
@@ -39,7 +38,7 @@
 <script>
   import {postRequest} from '../utils/axiosUtils'
 
-  const TIME_COUNT = 60; //更改倒计时时间
+  const TIME_COUNT = 30; //更改倒计时时间
   export default {
     name: 'register',
     data() {
@@ -122,7 +121,7 @@
         rules: {
           username: [
             {required: true, message: '请输入用户名', trigger: 'blur'},
-            {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
+            {min: 4, max: 10, message: '长度在 4 到 10 个字符', trigger: 'blur'}
           ],
           password: [
             {required: true, validator: validatePass, trigger: 'blur'}
@@ -135,6 +134,7 @@
           ],
           mailVerifyCode: [
             {required: true, validator: validateMailVerifyCode, trigger: 'blur'},
+            {min: 6, max: 6, message: '请输入6位验证码', trigger: 'blur'}
           ]
         }
       };
@@ -143,11 +143,13 @@
       submitForm(formName) {
         this.loading = true;
         this.$refs[formName].validate((valid) => {
+          console.log(valid);
           if (valid) {
             let user = {
               username: this.ruleForm.username,
               password: this.ruleForm.password,
               mail: this.ruleForm.mail,
+              verifyCode: this.ruleForm.mailVerifyCode,
             };
             postRequest('/user/register', user).then(resp => {
               this.loading = false;
@@ -179,51 +181,71 @@
         this.$refs[formName].resetFields();
       },
 
-      sendVerifyCode(value) {
-        this.$refs['ruleForm'].validateField("mail", (valid) => {
+      sendVerifyCode() {
+        this.$refs['ruleForm'].validateField('username', (valid) => {
           if (!valid) {
-            //60s cd
-            if (!this.timer) {
-              this.count = TIME_COUNT;
-              this.show = false;
-              this.timer = setInterval(() => {
-                if (this.count > 0 && this.count <= TIME_COUNT) {
-                  this.count--;
-                } else {
-                  this.show = true;
-                  clearInterval(this.timer);  // 清除定时器
-                  this.timer = null;
+            this.$refs['ruleForm'].validateField('mail', (valid) => {
+              if (!valid) {
+                //30s cd
+                if (!this.timer) {
+                  this.count = TIME_COUNT;
+                  this.show = false;
+                  this.timer = setInterval(() => {
+                    if (this.count > 0 && this.count <= TIME_COUNT) {
+                      this.count--;
+                    } else {
+                      this.show = true;
+                      clearInterval(this.timer);  // 清除定时器
+                      this.timer = null;
+                    }
+                  }, 1000)
                 }
-              }, 1000)
-            }
 
-            let param = {
-              mail: value,
-            }
-            postRequest('/user/mailVerifyCode', param).then(resp => {
-              this.loading = false;
-              console.log(resp);
-              if (resp.status == 200) {
-                if (resp.data.code === 200) {
-                  //this
-                } else {
-                  this.$alert(resp.data.message, resp.data.data);
+                let param = {
+                  username: this.ruleForm.username,
+                  mail: this.ruleForm.mail,
                 }
+                postRequest('/user/mailVerifyCode', param).then(resp => {
+                  this.loading = false;
+                  console.log(resp);
+                  if (resp.status == 200) {
+                    if (resp.data.code === 200) {
+                      this.$notify({
+                        title: "成功",
+                        message: "验证码已发送至邮箱",
+                        type: "success",
+                        offset: 100
+                      });
+                    } else {
+                      this.$alert(resp.data.message, resp.data.data);
+                    }
+                  } else {
+                    //失败
+                    this.$alert('邮件发送失败!', '失败!');
+                  }
+                }, resp => {
+                  this.loading = false;
+                  console.log(resp)
+                  this.$alert('服务器维护中', '失败!');
+                });
               } else {
-                //失败
-                this.$alert('注册失败!', '失败!');
+                this.$notify.error({
+                  title: "错误",
+                  message: "请填写邮箱",
+                  offset: 100
+                });
+                return false;
               }
-            }, resp => {
-              this.loading = false;
-              console.log(resp)
-              this.$alert('服务器维护中', '失败!');
             });
           } else {
+            this.$notify.error({
+              title: "错误",
+              message: "请填写用户名",
+              offset: 100
+            });
             return false;
           }
         });
-
-
 
 
       },

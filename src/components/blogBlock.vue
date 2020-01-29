@@ -50,8 +50,6 @@
       }
     },
     methods: {}
-
-
   }
 
 </script>
