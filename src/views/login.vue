@@ -15,7 +15,7 @@
       <el-button type="primary" style="width: 100%;" @click="doLogin()">提交</el-button>
     </el-form-item>
     <el-row style="text-align: center; margin-top: -10px;;">
-      <el-link type="primary" @click="findPassword()">忘记密码</el-link>
+      <el-link type="primary" @click="changePassword()">更改密码</el-link>
       <el-link type="primary" @click="doRegister()">用户注册</el-link>
     </el-row>
   </el-form>
@@ -84,8 +84,8 @@
       doRegister() {
         this.$router.push({path: 'register'})
       },
-      findPassword() {
-        this.$router.push({path: 'findPasswordByMail'})
+      changePassword() {
+        this.$router.push({path: 'changePassword'})
       },
     }
   }

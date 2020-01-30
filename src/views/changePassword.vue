@@ -2,7 +2,7 @@
   <div id="register">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="registerForm"
              v-loading="loading" element-loading-text="加载中。。。">
-      <h2 class="login-title">用户注册</h2>
+      <h2 class="login-title">邮箱登录</h2>
       <el-form-item label="用户名" prop="username">
         <el-input v-model="ruleForm.username"></el-input>
       </el-form-item>
@@ -28,7 +28,10 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')">
+          <span v-show="show">提交</span>
+          <span v-show="!show" class="count">{{count}} s</span>
+        </el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
     </el-form>
@@ -37,13 +40,13 @@
 </template>
 
 <script>
-  import {postRequest} from '../utils/axiosUtils'
   import {validateMail} from '@/utils/validateUtil'
+  import {postRequest} from '@/utils/axiosUtils'
   import {validateMailVerifyCode} from '@/utils/validateUtil'
 
   const TIME_COUNT = 30; //更改倒计时时间
   export default {
-    name: 'register',
+    name: "changePassword",
     data() {
       var validatePass = (rule, value, callback) => {
         if (value === '') {
@@ -111,14 +114,14 @@
               mail: this.ruleForm.mail,
               verifyCode: this.ruleForm.mailVerifyCode,
             };
-            postRequest('/user/register', user).then(resp => {
+            postRequest('/user/changePasswordByMail', user).then(resp => {
               this.loading = false;
               console.log(resp);
               if (resp.status == 200) {
                 if (resp.data.code === 200) {
                   this.$notify({
                     title: "成功",
-                    message: "用户注册成功",
+                    message: "密码已更改",
                     type: "success",
                     offset: 100
                   });
@@ -128,7 +131,7 @@
                 }
               } else {
                 //失败
-                this.$alert('注册失败!', '失败!');
+                this.$alert('邮件发送失败!', '失败!');
               }
             }, resp => {
               this.loading = false;
@@ -148,6 +151,7 @@
       },
 
       sendVerifyCode() {
+
         let clearCounter = () => {
           this.show = true;
           clearInterval(this.timer);  // 清除定时器
@@ -174,7 +178,7 @@
                 let param = {
                   username: this.ruleForm.username,
                   mail: this.ruleForm.mail,
-                  strategy: "register",
+                  strategy: "changePassword",
                 }
                 postRequest('/user/mailVerifyCode', param).then(resp => {
                   this.loading = false;
@@ -221,12 +225,12 @@
 
 
       },
+
     }
   }
 </script>
 
-<style>
-
+<style scoped>
   .registerForm {
     border-radius: 15px;
     background-clip: padding-box;
@@ -237,5 +241,4 @@
     border: 1px solid #eaeaea;
     box-shadow: 0 0 25px #cac6c6;
   }
-
 </style>

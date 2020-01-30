@@ -6,7 +6,7 @@ import Register from '@/views/register'
 import Create from '@/components/user/createBlog'
 import Test from '@/components/test'
 import Blog from '@/views/blog'
-import FindPassword from '@/views/findPassword'
+import ChangePassword from '@/views/changePassword'
 
 Vue.use(Router)
 
@@ -40,8 +40,8 @@ const routes = [
     component: Blog,
   },
   {
-    path: '/findPasswordByMail',
-    component: FindPassword,
+    path: '/changePassword',
+    component: ChangePassword,
   },
 ]
 
