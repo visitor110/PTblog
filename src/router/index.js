@@ -37,6 +37,7 @@ const routes = [
   },
   {
     path: '/blog/:id',
+    name: 'blog',
     component: Blog,
   },
   {

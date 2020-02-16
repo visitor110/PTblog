@@ -2,7 +2,7 @@
   <div id="register">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="registerForm"
              v-loading="loading" element-loading-text="加载中。。。">
-      <h2 class="login-title">邮箱登录</h2>
+      <h2 class="login-title" style="margin-bottom: 20px">修改密码</h2>
       <el-form-item label="用户名" prop="username">
         <el-input v-model="ruleForm.username"></el-input>
       </el-form-item>
@@ -83,7 +83,7 @@
         },
         rules: {
           username: [
-            {required: true, message: '请输入用户名', trigger: 'blur'},
+            {required: true, mssage: '请输入用户名', trigger: 'blur'},
             {min: 4, max: 10, message: '长度在 4 到 10 个字符', trigger: 'blur'}
           ],
           password: [

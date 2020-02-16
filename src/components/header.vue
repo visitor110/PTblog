@@ -1,16 +1,35 @@
 <template>
-  <div>
-    <el-row>
-      <el-col :span="20">
-        <el-tabs v-model="activeName" @tab-click="handleClick(activeName)">
-          <el-tab-pane label="首页" name="home">首页</el-tab-pane>
-          <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
-          <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
-          <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
-          <el-tab-pane label="search" name="fifth">search</el-tab-pane>
-        </el-tabs>
-      </el-col>
-      <el-col :span="4">
+  <div id="header">
+    <el-menu
+      :default-active="activeIndex2"
+      class="el-menu-home"
+      mode="horizontal"
+
+      @select="handleSelect"
+      background-color="#1ec0ff"
+      text-color="#FBFBFC"
+      active-text-color="#FBFBFC">
+
+      <el-menu-item index="home">首页</el-menu-item>
+      <el-submenu index="2">
+        <template slot="title">我的工作台</template>
+        <el-menu-item index="2-1">选项1</el-menu-item>
+        <el-menu-item index="2-2">选项2</el-menu-item>
+        <el-menu-item index="2-3">选项3</el-menu-item>
+        <el-submenu index="2-4">
+          <template slot="title">选项4</template>
+          <el-menu-item index="2-4-1">选项1</el-menu-item>
+          <el-menu-item index="2-4-2">选项2</el-menu-item>
+          <el-menu-item index="2-4-3">选项3</el-menu-item>
+        </el-submenu>
+      </el-submenu>
+      <el-menu-item index="3">消息中心</el-menu-item>
+      <el-menu-item index="4">
+        <el-link href="https://github.com/visitor110/PTblog" target="_blank"
+                 :underline="false">代码地址
+        </el-link>
+      </el-menu-item>
+      <el-menu-item index='login&person'>
         <span v-if="this.$store.state.username === ''" class="el-dropdown-link" @click="login()">
             登录·注册
         </span>
@@ -24,8 +43,8 @@
             <el-dropdown-item command="loginOut" divided>注销</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-      </el-col>
-    </el-row>
+      </el-menu-item>
+    </el-menu>
 
   </div>
 </template>
@@ -35,21 +54,23 @@
     name: 'Header',
     data() {
       return {
-        activeName: 'home',
+        activeIndex: '1',
+        activeIndex2: '1'
       };
     },
     methods: {
-      //标签页
-      handleClick(activeName) {
-        switch (activeName) {
-          case 'userManagement': {
-            this.$alert('user management')
+      handleSelect(key, keyPath) {
+        switch (key) {
+          case 'home': {
+            this.$router.push('/home');
             break;
           }
+            ;
         }
+        console.log(key, keyPath);
       },
-      login() {
-        this.$router.push('login');
+      login(){
+        this.$router.push('/login');
       },
       //下拉菜单
       handleCommand(command) {
@@ -67,13 +88,10 @@
 </script>
 
 <style>
-  .el-dropdown-link {
-    cursor: pointer;
-    color: #409EFF;
-  }
+  /*#header{*/
+    /*margin-top: -50px;*/
+    /*margin-bottom: 0px;*/
+  /*}*/
 
-  .el-icon-arrow-down {
-    font-size: 12px;
-  }
 
 </style>

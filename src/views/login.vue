@@ -1,7 +1,7 @@
 <template>
   <el-form class="login-form"
            v-loading="loading" element-loading-text="logining">
-    <h2 class="login-title">用户登录</h2>
+    <h2 class="login-title" style="margin-bottom: 20px">用户登录</h2>
     <el-form-item label="">
       <el-input type="text" v-model="username" auto-complete="off" placeholder="账户"></el-input>
     </el-form-item>

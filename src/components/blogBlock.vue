@@ -1,6 +1,6 @@
 <template>
   <div id="blogBlock">
-    <div id="blockContent">
+    <div id="blockContent" @click="lookupBlog()">
       <el-row>
         <el-col :span="4">
           <div id="username">
@@ -49,7 +49,14 @@
         type: Object,
       }
     },
-    methods: {}
+    methods: {
+      lookupBlog(){
+         this.$router.push({
+           name: 'blog',
+           params: {id: this.blog.id,
+                    blog: this.blog}});
+      },
+    }
   }
 
 </script>
@@ -71,6 +78,10 @@
   }
   #tags{
     margin-left: 10px;
+  }
+
+  #title{
+    color: deepskyblue;
   }
 
 </style>
