@@ -21,10 +21,7 @@
         </div>
 
       </el-row>
-      <el-row>
-        <div v-html="blog.content">
-        </div>
-      </el-row>
+
       <el-row>
         <el-tag id="tags" v-for="tag in tagList" :key="tag.tagName" size="mini">
           {{tag.tagName}}
@@ -50,11 +47,14 @@
       }
     },
     methods: {
-      lookupBlog(){
-         this.$router.push({
-           name: 'blog',
-           params: {id: this.blog.id,
-                    blog: this.blog}});
+      lookupBlog() {
+        this.$router.push({
+          name: 'blog',
+          params: {
+            id: this.blog.id,
+            blog: this.blog
+          }
+        });
       },
     }
   }
@@ -76,12 +76,14 @@
   .el-row {
     margin-top: 5px;
   }
-  #tags{
+
+  #tags {
     margin-left: 10px;
   }
 
-  #title{
+  #title {
     color: deepskyblue;
   }
+
 
 </style>
