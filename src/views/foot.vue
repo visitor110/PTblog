@@ -30,7 +30,7 @@
   #foot {
     color: #303133;
     background: #F2F6FC;
-    margin-top: 0px;
+    /*margin-top: 0px;*/
   }
 
   .mail {

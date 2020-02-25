@@ -1,41 +1,40 @@
 <template>
   <div id="blogBlock">
     <div id="blockContent" @click="lookupBlog()">
-      <el-row>
-        <el-col :span="4">
-          <div id="username">
-            {{blog.userId}}
-          </div>
-        </el-col>
+      <el-card id="blog_list_content">
 
-        <el-col :span="4">
+        <el-row id="blog_block_user_time">
+          <div id="user_name">
+            <h6>{{blog.userId}}</h6>
+          </div>
           <div id="time">
-            {{blog.createDate}}
+            <time>{{ createDateTime }}</time>
           </div>
-        </el-col>
-      </el-row>
+        </el-row>
 
-      <el-row>
-        <div id="title">
-          <h3>{{blog.title}}</h3>
-        </div>
+        <el-row>
+          <h3 id="blog_title">{{blog.title}}</h3>
+        </el-row>
 
-      </el-row>
+        <el-row>
+          <el-tag id="blog_tags" v-for="tag in tagList" :key="tag.tagName" size="mini">
+            {{tag.tagName}}
+          </el-tag>
+        </el-row>
+      </el-card>
 
-      <el-row>
-        <el-tag id="tags" v-for="tag in tagList" :key="tag.tagName" size="mini">
-          {{tag.tagName}}
-        </el-tag>
-      </el-row>
     </div>
   </div>
 </template>
 
 <script>
+  import {redirect} from "../utils/redirectUtil";
+  import {localDateTimeFormat} from "../utils/dateTimeUtil";
+
   export default {
     data() {
       return {
-        createDateTime: this.blog.createDate,
+        createDateTime: localDateTimeFormat(this.blog.createDate),
         contentStr: this.blog.content,
         tagList: this.blog.tagList,
       }
@@ -48,13 +47,9 @@
     },
     methods: {
       lookupBlog() {
-        this.$router.push({
-          name: 'blog',
-          params: {
-            id: this.blog.id,
-            blog: this.blog
-          }
-        });
+        let path = '/blog'
+        let id = this.blog.id
+        redirect(this, path, id)
       },
     }
   }
@@ -69,21 +64,29 @@
     line-height: 15px;
   }
 
-  #blockContent {
-    padding: 35px 35px 10px 35px;
-  }
-
-  .el-row {
-    margin-top: 5px;
-  }
-
-  #tags {
+  #blog_tags, #blog_title, #user_name, #time {
     margin-left: 10px;
   }
 
-  #title {
+  #blog_title {
     color: deepskyblue;
   }
 
+  #blog_list_content {
+    line-height: 30px;
+
+  }
+
+  #user_name {
+    float: left;
+    font-size: 30px;
+
+  }
+
+  #time {
+    float: left;
+    font-size: 18px;
+    color: #999;
+  }
 
 </style>

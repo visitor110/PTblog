@@ -1,34 +1,34 @@
 <template>
-  <el-container id="el-container-home-main" >
+  <div id="home">
 
-    <el-header>
-      <el-carousel :interval="4000" type="card" height="200px" >
+    <div id="home_carousel">
+      <el-carousel :interval="4000" type="card" height="200px">
         <el-carousel-item v-for="item in 6" :key="item">
           <h3 class="medium">{{ item }}</h3>
         </el-carousel-item>
       </el-carousel>
-    </el-header>
+    </div>
 
-    <el-container id="el-container-mainAside" style="margin-top: 200px">
+    <div id="home_box">
 
-      <el-main style="width: 70%">
+      <div id="home_blog_list">
         <BlogScroll/>
-      </el-main>
+      </div>
 
-      <el-aside id="aside" style="width: 25%">
+      <div id="home_recommend_list">
         <div style="margin: 10px">
           <HotBlog/>
         </div>
-      </el-aside>
+      </div>
 
-    </el-container>
+    </div>
 
-  </el-container>
+  </div>
 </template>
 
 <script>
   import BlogScroll from "./blogScroll"
-  import HotBlog from '@/components/hotblog'
+  import HotBlog from '@/components/card/hotBlogCard'
 
   export default {
     name: 'Home',
@@ -47,23 +47,33 @@
 </script>
 
 <style>
-  .el-header {
 
-    height: 400px;
-    text-align: center;
-
+  #home_carousel {
+    margin-top: 30px;
+    margin-left: 10%;
+    margin-right: 10%;
   }
 
-  .el-aside {
-
-    text-align: center;
-    line-height: 200px;
+  #home_box {
+    margin-top: 20px;
+    margin-left: 10%;
+    margin-right: 10%;
   }
 
-  .el-main {
+  #home_box > div {
+    display: inline-block;
+  }
 
-    text-align: center;
-    line-height: 160px;
+  #home_blog_list {
+    /*float: left;*/
+    width: 65%;
+  }
+
+  #home_recommend_list {
+    float: right;
+    width: 30%;
+    margin-top: 0px;
+
   }
 
   .el-carousel__item h3 {
@@ -80,12 +90,6 @@
 
   .el-carousel__item:nth-child(2n+1) {
     background-color: #d3dce6;
-  }
-
-  #el-container-home-main{
-    margin-top: 10px;
-    margin-left: 100px;
-    margin-right: 100px;
   }
 
 </style>

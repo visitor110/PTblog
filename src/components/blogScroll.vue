@@ -1,18 +1,23 @@
 <template>
-
-  <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy"
-       infinite-scroll-distance="10" class="list-data">
-    <div v-for="item in blogList" :key="item.index">
-      <el-row>
-        <blog-block :blog="item"></blog-block>
-      </el-row>
-    </div>
-    <el-row>
-      <div class="loading" v-if="busy">
-        <span id="load-text">{{loadText}}</span>
+  <div id="blogScroll">
+    <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy"
+         infinite-scroll-distance="50" id="blog_scroll" class="test_scroll">
+      <div v-for="item in blogList" :key="item.index">
+        <el-row>
+          <blog-block :blog="item"></blog-block>
+        </el-row>
       </div>
-    </el-row>
+      <el-row>
+        <div class="loading" v-if="busy">
+          <span id="load-text">{{loadText}}</span>
+        </div>
+      </el-row>
+      <el-backtop/>
+    </div>
+
+
   </div>
+
 </template>
 
 <script>
@@ -53,7 +58,7 @@
                 }
 
                 this.busy = false
-              }, 1000);
+              }, 100);
               this.pageIndex++;
 
             } else {
@@ -77,7 +82,7 @@
     margin-bottom: 5px;
   }
 
-  .list-data {
+  #blog_scroll {
     height: 100%;
     overflow-y: hidden;
   }
