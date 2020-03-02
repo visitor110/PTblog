@@ -10,30 +10,16 @@ import ChangePassword from '@/views/changePassword'
 
 Vue.use(Router)
 
-const routes = [
-  {
-    path: '/',
-    redirect: '/home',
-  },
+//所有权限
+export const constantRouterMap = [
   {
     path: '/home',
     component: Home,
   },
-  {
-    path: '/login',
-    component: Login,
-  },
+
   {
     path: '/register',
     component: Register,
-  },
-  {
-    path: '/createBlog',
-    component: Create,
-  },
-  {
-    path: '/test',
-    component: Test,
   },
   {
     path: '/blog/:id',
@@ -44,9 +30,39 @@ const routes = [
     path: '/changePassword',
     component: ChangePassword,
   },
+  {
+    path: '/login',
+    component: Login,
+  },
+  {
+    path: '/',
+    redirect: '/home',
+  },
 ]
 
+//特定权限
+export const asyncRouterMap = [
+  {
+    path: '/test',
+    component: Test,
+    name: '权限测试',
+    meta: {role: ['admin']}, //页面需要的权限
+  },
+  {
+    path: '/register',
+    component: Blog,
+    meta: {role: ['admin', 'User']},
+  },
+  {
+    path: '/createBlog',
+    component: Create,
+    meta: {role: ['User', 'admin']},
+  },
+  {path: '*', redirect: '/404', hidden: true}
+
+];
+
 export default new Router({
-  routes: routes,
+  routes: constantRouterMap,
   mode: 'history'
 })

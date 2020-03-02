@@ -48,6 +48,10 @@
   import {mavonEditor} from 'mavon-editor'
   import 'mavon-editor/dist/css/index.css'
   import {postRequest} from "../../utils/axiosUtils";
+  import {createNamespacedHelpers} from 'vuex'
+
+  const {mapGetters} = createNamespacedHelpers("userInfo")
+
 
   export default {
     components: {
@@ -64,11 +68,13 @@
         inputValue: ''
       }
     },
+    computed:{
+      ...mapGetters(['getUsername','getUserId'])
+    },
     methods: {
       change(value, render) {
         //实时获取转成html的数据
         this.html = render
-        // console.log(this.html)
       },
       // 将图片上传到服务器，返回地址替换到md中
       $imgAdd(pos, $file) {
@@ -91,8 +97,8 @@
       push() {
         let params = {
           blog: this.html,
-          username: this.$store.state.username,
-          userId: this.$store.state.userId,
+          username: this.getUsername,
+          userId: this.getUserId,
           title: this.title,
           tagList: this.dynamicTags,
         }
@@ -110,7 +116,6 @@
                 type: 'success',
                 offset: 100
               });
-              // this.$alert(result.message)
             }
           }
         }, resp => {
@@ -138,8 +143,8 @@
         this.inputVisible = false;
         this.inputValue = '';
       },
-      validate(inputValue){
-        if(this.dynamicTags.length === 5){
+      validate(inputValue) {
+        if (this.dynamicTags.length === 5) {
           this.$notify({
             title: "错误",
             message: "最多5个标签",
@@ -148,8 +153,8 @@
           });
           return false;
         }
-        for(let tag of this.dynamicTags){
-          if(tag === inputValue){
+        for (let tag of this.dynamicTags) {
+          if (tag === inputValue) {
             this.$notify({
               title: "错误",
               message: "已存在标签",

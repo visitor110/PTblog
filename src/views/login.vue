@@ -23,6 +23,7 @@
 
 <script>
   import {postRequestLogin} from '../utils/axiosUtils'
+  import {setToken} from "../utils/cookie";
 
   export default {
 
@@ -55,11 +56,17 @@
             if (result.code === 200) {
               //成功
               this.password = '';
-              this.$store.commit('login', {
+              let userInfo = result.data
+
+              this.$store.commit('userInfo/login', {
                 token: resp.headers.authorization,
-                username: this.username,
-                userId: result.data,
-              }); //token
+                username: userInfo.userName,
+                userId: userInfo.userId,
+                imgAddress: userInfo.imgAddress,
+              });
+
+              setToken(resp.headers.authorization)
+
               this.$notify({
                 title: this.username,
                 message: "欢迎回来",

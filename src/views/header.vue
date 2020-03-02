@@ -30,12 +30,12 @@
         </el-link>
       </el-menu-item>
       <el-menu-item index='login&person'>
-        <span v-if="this.$store.state.username === ''" class="el-dropdown-link" @click="login()">
+        <span v-if="getUsername === ''" class="el-dropdown-link" @click="login()">
             登录·注册
         </span>
         <el-dropdown v-else @command="handleCommand">
           <span class="el-dropdown-link">
-            {{this.$store.state.username}}<i class="el-icon-arrow-down el-icon--right"></i>
+            {{getUsername}}<i class="el-icon-arrow-down el-icon--right"></i>
            </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="info">个人信息</el-dropdown-item>
@@ -50,6 +50,9 @@
 </template>
 
 <script>
+  import {createNamespacedHelpers} from 'vuex'
+
+  const {mapGetters} = createNamespacedHelpers("userInfo")
   export default {
     name: 'Header',
     data() {
@@ -69,7 +72,7 @@
         }
         console.log(key, keyPath);
       },
-      login(){
+      login() {
         this.$router.push('/login');
       },
       //下拉菜单
@@ -83,7 +86,11 @@
           }
         }
       }
+    },
+    computed: {
+      ...mapGetters(['getUsername']),
     }
+
   }
 </script>
 
