@@ -1,11 +1,17 @@
 <template>
-  <el-card id="blogContentCard">
-    <h2 class="title">{{blog.title}}</h2>
-    <div class="content" v-html=this.blog.content></div>
-  </el-card>
+  <div>
+    <el-card id="blogContentCard">
+      <h2 class="title">{{blog.title}}</h2>
+      <div class="content" v-html=this.blog.content></div>
+    </el-card>
+    <comment-card/>
+  </div>
+
+
 </template>
 
 <script>
+  import commentCard from './commentCard'
   export default {
     name: "blogContentCard",
     data() {
@@ -14,6 +20,11 @@
       }
     },
     props: {blog: {}},
+    components:{
+      commentCard
+    },
+    methods:{
+    }
 
   }
 </script>

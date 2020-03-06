@@ -16,7 +16,6 @@ export const constantRouterMap = [
     path: '/home',
     component: Home,
   },
-
   {
     path: '/register',
     component: Register,
@@ -47,11 +46,6 @@ export const asyncRouterMap = [
     component: Test,
     name: '权限测试',
     meta: {role: ['admin']}, //页面需要的权限
-  },
-  {
-    path: '/register',
-    component: Blog,
-    meta: {role: ['admin', 'User']},
   },
   {
     path: '/createBlog',

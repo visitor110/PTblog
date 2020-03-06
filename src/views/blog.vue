@@ -2,7 +2,7 @@
   <div>
     <el-container>
       <el-main id="blog_contain">
-        <blog-content-card :blog="blog"/>
+        <BlogContentCard :blog="blog"/>
       </el-main>
 
       <el-aside id="blog_aside">
@@ -19,7 +19,7 @@
 
 <script>
   import {getRequest} from "../utils/axiosUtils";
-  import Hotblog from "../components/card/hotBlogCard";
+  import Hotblog from "@/components/card/hotBlogCard";
   import BlogContentCard from "../components/card/blogContentCard";
 
   export default {
@@ -67,13 +67,15 @@
 
 <style scoped>
 
-  #blog_contain{
-  margin-left: 50px;
+  #blog_contain {
+    margin-left: 50px;
   }
+
   #blog_aside {
     width: 25%
   }
-  #blog_aside_content{
+
+  #blog_aside_content {
     margin-top: 20px;
     margin-right: 20px;
   }

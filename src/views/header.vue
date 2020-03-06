@@ -77,11 +77,15 @@
       },
       //下拉菜单
       handleCommand(command) {
-        // this.$message('click on item ' + command);
         switch (command) {
 
           case 'createBlog': {
             this.$router.push({path: '/createBlog'});
+            break;
+          }
+          case 'loginOut': {
+            window.clearVuexAlong()
+            location.reload()
             break;
           }
         }

@@ -33,7 +33,7 @@ export default {
     },
     setRoles(state, param) {
       state.roles = param
-    }
+    },
   },
   actions: {
     //通过token获取用户信息
