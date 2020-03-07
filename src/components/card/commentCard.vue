@@ -45,9 +45,10 @@
           let result = resp.data
           if (result.code === 200) {
             let valueList = result.data
+            console.log(valueList);
             if (valueList.length > 0) {
               this.commentNum = valueList.length;
-              this.pushIntoCommentList(valueList)
+              this.pushIntoDiscussList(valueList)
             } else {
               //评论为空
             }
@@ -60,9 +61,9 @@
         })
       },
       //发送评论
-      doSend(value) {
+      doSend(content) {
         let params = {
-          "content": value,
+          "content": content,
           "userId": this.getUserId,
           "blogId": this.blogId,
         }
@@ -77,7 +78,7 @@
                 nickName: this.getUsername,
                 avatar: ''
               },
-              content: value,
+              content: content,
               createDate: '刚才',
               childrenList: [],
             })
@@ -92,12 +93,40 @@
 
       },
       //发送回复
-      doChidSend(value) {
-        console.log(value);
+      doChidSend(content, commentUserId, commentId) {
+        let params = {
+          "content": content,
+          "targetUserId": commentUserId,
+          "discussId": commentId,
+          "userId": this.getUserId,
+        }
+        const url = '/reply/sendReply'
+        postRequest(url, params).then(resp => {
+          let result = resp.data
+          if (result.code === 200) {
+            // this.commentList.unshift({
+            //   id: '0',
+            //   commentUser: {
+            //     id: this.getUserId,
+            //     nickName: this.getUsername,
+            //     avatar: ''
+            //   },
+            //   content: value,
+            //   createDate: '刚才',
+            //   childrenList: [],
+            // })
+          } else {
+            this.$alert('发表评论失败!', '失败!');
+          }
+        }, resp => {
+          console.log(resp)
+          this.$alert('服务器维护中', '失败!');
+        })
 
       },
       //向commentList添加
-      pushIntoCommentList(list) {
+      pushIntoDiscussList(list) {
+        let result = []
         for (let values of list) {
           let item = {
             id: '',
@@ -109,6 +138,7 @@
             content: "",
             createDate: '',
             childrenList: [],
+
           };
           item.id = values.discuss.id;
           item.commentUser.id = values.discuss.userId;
@@ -116,9 +146,46 @@
           item.commentUser.avatar = values.avatar;
           item.content = values.discuss.content;
           item.createDate = values.discuss.createDate;
-          item.childrenList = [];
-          this.commentList.push(item)
+          item.childrenList = values.replyPojoList.length > 0 ?
+            this.pushIntoReplyList(values.replyPojoList) : [];
+          result.push(item)
         }
+        this.commentList = result;
+        console.log("commentList", this.commentList);
+      },
+      pushIntoReplyList(replyPojoList) {
+        console.log("replyPojoList", replyPojoList);
+        let result = [];
+        for (let item of replyPojoList) {
+          console.log("item", item);
+          let reply = {
+            id: 0,
+            commentUser: {
+              id: 0,
+              nickName: '',
+              avatar: ''
+            },
+            targetUser: {
+              id: 0,
+              nickName: '',
+              avatar: ''
+            },
+            content: '',
+            createDate: ''
+          };
+          reply.id = item.replyId;
+          reply.content = item.content;
+          reply.createDate = item.createDate;
+          reply.commentUser.id = item.replyUser.id;
+          reply.commentUser.nickName = item.replyUser.username;
+          reply.commentUser.avatar = item.replyUser.avatar;
+          reply.targetUser.id = item.targetUser.id;
+          reply.targetUser.nickName = item.targetUser.username;
+          reply.targetUser.avatar = item.targetUser.avatar;
+          result.push(reply);
+        }
+        console.log("result", result);
+        return result;
       }
     },
     props: [],
