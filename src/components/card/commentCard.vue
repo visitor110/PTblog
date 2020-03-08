@@ -14,6 +14,7 @@
 <script>
   import comment from 'hbl-comment'
   import {postRequest} from "../../utils/axiosUtils";
+  import {localDateTimeFormat} from "../../utils/dateTimeUtil";
   import {createNamespacedHelpers} from 'vuex'
 
   const {mapGetters} = createNamespacedHelpers("userInfo")
@@ -145,7 +146,7 @@
           item.commentUser.nickName = values.username;
           item.commentUser.avatar = values.avatar;
           item.content = values.discuss.content;
-          item.createDate = values.discuss.createDate;
+          item.createDate = localDateTimeFormat(values.discuss.createDate);
           item.childrenList = values.replyPojoList.length > 0 ?
             this.pushIntoReplyList(values.replyPojoList) : [];
           result.push(item)
@@ -175,7 +176,7 @@
           };
           reply.id = item.replyId;
           reply.content = item.content;
-          reply.createDate = item.createDate;
+          reply.createDate = localDateTimeFormat(item.createDate);
           reply.commentUser.id = item.replyUser.id;
           reply.commentUser.nickName = item.replyUser.username;
           reply.commentUser.avatar = item.replyUser.avatar;
