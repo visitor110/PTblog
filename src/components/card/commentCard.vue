@@ -5,7 +5,7 @@
                   @doChidSend="doChidSend"
                   :commentList="commentList"
                   :commentNum="commentNum"
-
+                  :avatar="avatar"
       />
     </el-card>
   </div>
@@ -26,11 +26,13 @@
         blogId: '',
         commentList: [],
         commentNum: 0,
+        avatar: '',
 
       }
     },
     mounted() {
       this.blogId = this.$route.params.id
+      this.avatar = this.getAvatar;
       this.load()
     },
     components: {
@@ -46,9 +48,7 @@
           let result = resp.data
           if (result.code === 200) {
             let valueList = result.data
-            console.log(valueList);
             if (valueList.length > 0) {
-              this.commentNum = valueList.length;
               this.pushIntoDiscussList(valueList)
             } else {
               //评论为空
@@ -57,7 +57,6 @@
             this.$alert('评论加载失败!', '失败!');
           }
         }, resp => {
-          console.log(resp)
           this.$alert('服务器维护中', '加载评论失败!');
         })
       },
@@ -77,7 +76,7 @@
               commentUser: {
                 id: this.getUserId,
                 nickName: this.getUsername,
-                avatar: ''
+                avatar: this.getAvatar,
               },
               content: content,
               createDate: '刚才',
@@ -88,7 +87,6 @@
           }
         }, resp => {
           // this.loading = false;
-          console.log(resp)
           this.$alert('服务器维护中', '失败!');
         })
 
@@ -120,7 +118,6 @@
             this.$alert('发表评论失败!', '失败!');
           }
         }, resp => {
-          console.log(resp)
           this.$alert('服务器维护中', '失败!');
         })
 
@@ -129,6 +126,7 @@
       pushIntoDiscussList(list) {
         let result = []
         for (let values of list) {
+          this.commentNum++;
           let item = {
             id: '',
             commentUser: {
@@ -149,16 +147,14 @@
           item.createDate = localDateTimeFormat(values.discuss.createDate);
           item.childrenList = values.replyPojoList.length > 0 ?
             this.pushIntoReplyList(values.replyPojoList) : [];
+          this.commentNum += values.replyPojoList.length;
           result.push(item)
         }
         this.commentList = result;
-        console.log("commentList", this.commentList);
       },
       pushIntoReplyList(replyPojoList) {
-        console.log("replyPojoList", replyPojoList);
         let result = [];
         for (let item of replyPojoList) {
-          console.log("item", item);
           let reply = {
             id: 0,
             commentUser: {
@@ -185,13 +181,12 @@
           reply.targetUser.avatar = item.targetUser.avatar;
           result.push(reply);
         }
-        console.log("result", result);
         return result;
       }
     },
     props: [],
     computed: {
-      ...mapGetters(['getUserId', 'getUsername']),
+      ...mapGetters(['getUserId', 'getUsername','getAvatar']),
     }
   }
 </script>

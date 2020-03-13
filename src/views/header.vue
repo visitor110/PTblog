@@ -31,11 +31,12 @@
       </el-menu-item>
       <el-menu-item index='login&person'>
         <span v-if="getUsername === ''" class="el-dropdown-link" @click="login()">
-            登录·注册
+            <img :src="require('@/assets/avatar/empty.jpg')"/>
         </span>
         <el-dropdown v-else @command="handleCommand">
           <span class="el-dropdown-link">
-            {{getUsername}}<i class="el-icon-arrow-down el-icon--right"></i>
+            <!--{{getUsername}}<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
+            <img :src="getAvatar?getAvatar:require('@/assets/avatar/default.jpg')"/>
            </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="info">个人信息</el-dropdown-item>
@@ -92,12 +93,16 @@
       }
     },
     computed: {
-      ...mapGetters(['getUsername']),
+      ...mapGetters(['getUsername','getAvatar'])
     }
 
   }
 </script>
 
 <style>
-
+  img{
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+  }
 </style>

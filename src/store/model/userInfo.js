@@ -6,7 +6,7 @@ export default {
     token: '',
     username: '',
     userId: '',
-    imgAddress: '',
+    avatar: '',
     roles: [],
   },
   getters: {
@@ -22,14 +22,16 @@ export default {
     getUserId(state) {
       return state.userId
     },
-
+    getAvatar(state){
+      return state.avatar
+    }
   },
   mutations: {
     login(state, param) {
       state.token = param.token;
       state.username = param.username;
       state.userId = param.userId;
-      state.imgAddress = param.imgAddress;
+      state.avatar = param.imgAddress;
     },
     setRoles(state, param) {
       state.roles = param

@@ -4,8 +4,11 @@
       <el-card id="blog_list_content">
 
         <el-row id="blog_block_user_time">
+          <div id="user_avatar">
+            <img :src="blog.user.avatar?blog.user.avatar:require('@/assets/avatar/default.jpg')"/>
+          </div>
           <div id="user_name">
-            <h6>{{blog.userId}}</h6>
+            <h6>{{blog.user.username}}</h6>
           </div>
           <div id="time">
             <time>{{ createDateTime }}</time>
@@ -22,7 +25,6 @@
           </el-tag>
         </el-row>
       </el-card>
-
     </div>
   </div>
 </template>
@@ -51,7 +53,7 @@
         let id = this.blog.id
         redirect(this, path, id)
       },
-    }
+    },
   }
 
 </script>
@@ -75,6 +77,13 @@
   #blog_list_content {
     line-height: 30px;
 
+  }
+
+  #user_avatar img {
+    float: left;
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
   }
 
   #user_name {
